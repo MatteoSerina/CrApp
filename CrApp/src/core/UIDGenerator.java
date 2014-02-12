@@ -1,4 +1,11 @@
-package Core;
+package core;
+
+import identity.ClassIdentity;
+
+import java.security.SecureRandom;
+
+
+
 
 
 public class UIDGenerator 
@@ -20,6 +27,10 @@ public class UIDGenerator
 	        return Inner.getContext() ;
 	    }
 	    
+	    public static byte[] generateSecureIdentity ()
+	    {
+	    	return ( new SecureRandom () ).generateSeed( 64 ) ;
+	    }	    
 	    
 	    public long next ()
 	    {

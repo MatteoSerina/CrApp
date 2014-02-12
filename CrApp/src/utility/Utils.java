@@ -1,4 +1,4 @@
-package Core;
+package utility;
 
 
 public class Utils 
