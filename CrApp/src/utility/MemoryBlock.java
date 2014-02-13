@@ -5,7 +5,10 @@ import identity.SchemeIdentity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
+
 
 
 
@@ -166,9 +169,11 @@ public class MemoryBlock
 		{
 			String scopeDescriptor = getScopeDescriptor (  toRemove.get( i )  ) ;
 			
-			for ( String currentKey : innerMap.keySet() )
-				if (  currentKey.indexOf( scopeDescriptor ) == 0  )
-					innerMap.remove( currentKey ) ;	
+			String [] keys = innerMap.keySet().toArray( new String [] {} );
+			
+			for ( int j = 0 ; j < keys.length ; j++ )
+				if (  keys[j].indexOf( scopeDescriptor ) == 0  )
+  					innerMap.remove( keys[j] ) ;
 		}
 		
 		return true ;

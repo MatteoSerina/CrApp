@@ -127,7 +127,7 @@ public class BaseScheme
 	
 	
 	
-	private boolean addBehaviour ( int _behaviourKind , Object _obj ) throws Exception
+	private boolean addBehaviour ( int _behaviourKind , Object _obj , int _position ) throws Exception
 	{
 		if ( hasStarted )
 			throw new Exception ( "Can not change scheme's behaviour when the scheme has started running.") ;
@@ -135,45 +135,106 @@ public class BaseScheme
 		if ( _obj == null )
 			return false ;
 		
-		switch ( _behaviourKind )
+		
+		if ( _position < 0 )
 		{
-			case 0 : afterLoadingBehaviours.add ( _obj )      ; break ;
-			case 1 : messageReceivedBehaviours.add ( _obj ) ; break ;
-			case 2 : beforeUnloadingBehaviours.add ( _obj )   ; break ;
-			default : throw new Exception ( "Unknown behavoiur kind with number : " + _behaviourKind + " can not add it." ) ;
+			switch ( _behaviourKind )
+			{
+				case 0 : afterLoadingBehaviours.add ( _obj )      ; break ;
+				case 1 : messageReceivedBehaviours.add ( _obj ) ; break ;
+				case 2 : beforeUnloadingBehaviours.add ( _obj )   ; break ;
+				default : throw new Exception ( "Unknown behavoiur kind with number : " + _behaviourKind + " can not add it." ) ;
+			}
+		}
+		else 
+		{
+			switch ( _behaviourKind )
+			{
+				case 0 :  	if ( _position < afterLoadingBehaviours.size() )
+								afterLoadingBehaviours.add ( _position , _obj ) ; 
+							else 
+								afterLoadingBehaviours.add ( _obj ) ;		
+							break ;
+							
+				case 1 : 	if ( _position < messageReceivedBehaviours.size() )
+								messageReceivedBehaviours.add ( _position , _obj ) ; 
+							else
+								messageReceivedBehaviours.add ( _obj ) ; 
+							break ;
+							
+				case 2 : 	if ( _position < beforeUnloadingBehaviours.size() )
+								beforeUnloadingBehaviours.add ( _position , _obj ) ;
+							else
+								beforeUnloadingBehaviours.add ( _obj ) ;
+							break ;
+							
+				default : throw new Exception ( "Unknown behavoiur kind with number : " + _behaviourKind + " can not add it." ) ;
+			}
 		}
 		
 		return true ;	
 	}
 	
+	
+	public boolean addOnAfterLoadingScheme ( BaseScheme _scheme , int _position ) throws Exception
+	{
+		return addBehaviour ( ON_AFTER_LOADING , _scheme , _position ) ;
+	}
+
+	public boolean addOnAfterLoadingHandler ( GenericHandler _delegate , int _position ) throws Exception
+	{
+		return addBehaviour ( ON_AFTER_LOADING , _delegate , _position ) ;	
+	}
+	
+	public boolean addOnMessageReceivedScheme ( BaseScheme _scheme , int _position ) throws Exception
+	{
+		return addBehaviour ( ON_MESSAGE_RECEIVED , _scheme , _position ) ;
+	}
+
+	public boolean addOnMessageReceivedHandler ( GenericHandler _delegate , int _position ) throws Exception
+	{
+		return addBehaviour ( ON_MESSAGE_RECEIVED , _delegate , _position ) ;	
+	}
+	
+	public boolean addOnBeforeUnloadingScheme ( BaseScheme _scheme , int _position ) throws Exception
+	{
+		return addBehaviour ( ON_BEFORE_UNLOADING , _scheme , _position ) ;
+	}
+
+	public boolean addOnBeforeUnloadingHandler ( GenericHandler _delegate , int _position ) throws Exception
+	{
+		return addBehaviour ( ON_BEFORE_UNLOADING , _delegate , _position ) ;	
+	}
+	
+	
 	public boolean addOnAfterLoadingScheme ( BaseScheme _scheme ) throws Exception
 	{
-		return addBehaviour ( ON_AFTER_LOADING , _scheme ) ;
+		return addBehaviour ( ON_AFTER_LOADING , _scheme , -1 ) ;
 	}
 
 	public boolean addOnAfterLoadingHandler ( GenericHandler _delegate ) throws Exception
 	{
-		return addBehaviour ( ON_AFTER_LOADING , _delegate ) ;	
+		return addBehaviour ( ON_AFTER_LOADING , _delegate , -1 ) ;	
 	}
 	
 	public boolean addOnMessageReceivedScheme ( BaseScheme _scheme ) throws Exception
 	{
-		return addBehaviour ( ON_MESSAGE_RECEIVED , _scheme ) ;
+		return addBehaviour ( ON_MESSAGE_RECEIVED , _scheme , -1 ) ;
 	}
 
 	public boolean addOnMessageReceivedHandler ( GenericHandler _delegate ) throws Exception
 	{
-		return addBehaviour ( ON_MESSAGE_RECEIVED , _delegate ) ;	
+		return addBehaviour ( ON_MESSAGE_RECEIVED , _delegate , -1 ) ;	
 	}
 	
 	public boolean addOnBeforeUnloadingScheme ( BaseScheme _scheme ) throws Exception
 	{
-		return addBehaviour ( ON_BEFORE_UNLOADING , _scheme ) ;
+		return addBehaviour ( ON_BEFORE_UNLOADING , _scheme , -1 ) ;
 	}
 
 	public boolean addOnBeforeUnloadingHandler ( GenericHandler _delegate ) throws Exception
 	{
-		return addBehaviour ( ON_BEFORE_UNLOADING , _delegate ) ;	
+		return addBehaviour ( ON_BEFORE_UNLOADING , _delegate , -1 ) ;	
 	}
 	
 	

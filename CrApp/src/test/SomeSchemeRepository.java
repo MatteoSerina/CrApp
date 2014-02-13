@@ -55,16 +55,6 @@ public class SomeSchemeRepository
 		System.out.println( "Cypher's scheme setted up.");
 	}
 	
-	
-	private static void cypStep1Execute ( Object _context , MemoryBlock _memoryBlock , SchemeIdentity _scope , Message _message  ) throws Exception
-	{
-		int len = _message.getData().length ;
-		
-		_memoryBlock.store("KEY_LEN", new Value ( len ) ) ;
-
-		System.out.println( "Cypher's scheme starting to process one message.");
-	}
-	
 	private static void cypStep3Execute ( Object _context , MemoryBlock _memoryBlock , SchemeIdentity _scope , Message _message  ) throws Exception
 	{
 		Value <Byte[]> wrappedKey = _memoryBlock.load( "SEED_RESULT" ) ;
@@ -88,7 +78,7 @@ public class SomeSchemeRepository
 		System.out.println( "Cypher's scheme is about to be shutted down.");
 	}
 	
-	public static BaseScheme getAlgorithmScheme () throws Exception
+	public BaseScheme getAlgorithmScheme () throws Exception
 	{
 		BaseScheme seedScheme = new BaseScheme ( "Seed" ) ;
 		
@@ -99,7 +89,6 @@ public class SomeSchemeRepository
 		BaseScheme cypScheme = new BaseScheme ( "Cypher" ) ;
 		
 		cypScheme.addOnAfterLoadingHandler( new GenericHandler ( "test.SomeSchemeRepository.cypSetup()" ) ) ;
-		cypScheme.addOnMessageReceivedHandler( new GenericHandler ( "test.SomeSchemeRepository.cypStep1Execute()" ) ) ;
 		cypScheme.addOnMessageReceivedScheme(seedScheme) ;
 		cypScheme.addOnMessageReceivedHandler( new GenericHandler ( "test.SomeSchemeRepository.cypStep3Execute()" ) ) ;
 		cypScheme.addOnBeforeUnloadingHandler( new GenericHandler ( "test.SomeSchemeRepository.cypTeardown()" ) ) ;
