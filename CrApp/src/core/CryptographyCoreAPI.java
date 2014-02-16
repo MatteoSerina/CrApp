@@ -32,5 +32,20 @@ public class CryptographyCoreAPI
 		
 		return buffer ;
 	}
+	
+	public static Byte[] aesAlgorithm (Byte[] _inMessage, Byte[] _keyBytes, Boolean _encrypt){
+		//Setup of the cipher
+		Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+		Cipher cipher = Cipher.getInstance("AES", "BC");
+		SecretKeySpec key = new SecretKeySpec(_keyBytes, "AES");
+
+		if(_encrypt)
+			
+			return null;
+		}
+		else{
+			return null;
+		}
+	}
 
 }
