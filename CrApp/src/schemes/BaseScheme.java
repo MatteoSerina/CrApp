@@ -52,7 +52,7 @@ public class BaseScheme
 			if ( action.getClass() == this.getClass() )
 				(( BaseScheme ) action ).load( this , memory ) ;
 			else if ( action instanceof GenericHandler )
-				((GenericHandler) action ).invoke ( this , memory , identity , null ) ;
+				((GenericHandler) action ).invoke ( this , memory , null ) ;
 	}
 	
 	public void unload () throws Exception
@@ -72,7 +72,7 @@ public class BaseScheme
 					(( BaseScheme ) action ).unload() ;
 				}
 			else if ( action instanceof GenericHandler )
-				((GenericHandler) action ).invoke ( this , memory , identity , null ) ;
+				((GenericHandler) action ).invoke ( this , memory , null ) ;
 		
  		Delegate delScopeDelegate = new Delegate ( memory , "deleteScope" ) ;
  		delScopeDelegate.invoke( identity ) ;
@@ -120,7 +120,7 @@ public class BaseScheme
 					_message = (( BaseScheme ) action ).processMessage( _message ) ;
 				}	
 			else if ( action instanceof GenericHandler )
-				((GenericHandler) action ).invoke ( context , memory , identity , _message ) ;
+				((GenericHandler) action ).invoke ( context , memory , _message ) ;
 		
 		return _message ;
 	}

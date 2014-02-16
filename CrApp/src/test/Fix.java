@@ -10,7 +10,7 @@ import utility.Value;
 public class Fix 
 {
 
-	private static void cypStep1Execute ( Object _context , MemoryBlock _memoryBlock , SchemeIdentity _scope , Message _message  ) throws Exception
+	private static void cypStep1Execute ( Object _context , MemoryBlock _memoryBlock , Message _message  ) throws Exception
 	{
 		int len = _message.getData().length ;
 		
@@ -23,5 +23,7 @@ public class Fix
 	{
 		_scheme.addOnMessageReceivedHandler( new GenericHandler ( "test.Fix.cypStep1Execute()" ) , 0 ) ;
 	}
+	
+	
 
 }

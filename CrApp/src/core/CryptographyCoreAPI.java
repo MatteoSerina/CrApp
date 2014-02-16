@@ -9,7 +9,6 @@ public class CryptographyCoreAPI
 		if ( _message.length != _key.length )
 			throw new Exception ("Message and key must have the same lenght." ) ;
 		
-		
 		for ( int i = 0 ; i < _message.length ; i++ )
 			_message [i] = (byte)(_message[i] ^ _key[i]) ;
 		
