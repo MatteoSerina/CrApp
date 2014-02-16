@@ -3,6 +3,7 @@ package schemes;
 import identity.SchemeIdentity;
 import java.util.ArrayList;
 import message.Message;
+import message.MessageStack;
 import delegate.*;
 import utility.*;
 
@@ -97,7 +98,7 @@ public class BaseScheme
 		this.load ( _context , _memory ) ;
 	}
 	
-	public Message processMessage ( Message _message ) throws Exception
+	public MessageStack processMessage ( MessageStack _message ) throws Exception
 	{
 		if ( ! isLoaded )
 			throw new Exception ( "Unloaded scheme can not process a message." ) ;

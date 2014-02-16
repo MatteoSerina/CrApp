@@ -4,6 +4,7 @@ import identity.SchemeIdentity;
 import core.CryptographyCoreAPI;
 import delegate.GenericHandler;
 import message.Message;
+import message.MessageStack;
 import schemes.BaseScheme;
 import utility.MemoryBlock;
 import utility.Value;
@@ -15,14 +16,14 @@ public class SomeSchemeRepository
 	
 	
 	// METODI PER LO SCHEMA DI GENERAIZONE CHIAVI (SEME)
-	private static void seedSetup ( Object _context , MemoryBlock _memoryBlock , Message _message  ) throws Exception
+	private static void seedSetup ( Object _context , MemoryBlock _memoryBlock , MessageStack _message  ) throws Exception
 	{
 		_memoryBlock.scopedStore( "BASE_SEED",  new Value <Long> ( System.nanoTime() ) ) ;
 		
 		System.out.println( "Seed's scheme setted up.");
 	}
 	
-	private static void seedExecute ( Object _context , MemoryBlock _memoryBlock , Message _message  ) throws Exception
+	private static void seedExecute ( Object _context , MemoryBlock _memoryBlock , MessageStack _message  ) throws Exception
 	{
 		Value <Long> base = _memoryBlock.scopedLoad( "BASE_SEED" ) ;
 		Value <Integer> length = _memoryBlock.load( "KEY_LEN" ) ;
@@ -44,18 +45,18 @@ public class SomeSchemeRepository
 		System.out.println( "Seed's scheme has just process one message.");
 	}
 	
-	private static void seedTeardown ( Object _context , MemoryBlock _memoryBlock , Message _message  ) throws Exception
+	private static void seedTeardown ( Object _context , MemoryBlock _memoryBlock , MessageStack _message  ) throws Exception
 	{
 		System.out.println( "Seed's scheme is about to be shutted down.");
 	}
 	
 	//METODI PER LO SCHEMA DI CODIFICA
-	private static void cypSetup ( Object _context , MemoryBlock _memoryBlock, Message _message  ) throws Exception
+	private static void cypSetup ( Object _context , MemoryBlock _memoryBlock, MessageStack _message  ) throws Exception
 	{
 		System.out.println( "Cypher's scheme setted up.");
 	}
 	
-	private static void cypStep3Execute ( Object _context , MemoryBlock _memoryBlock , Message _message  ) throws Exception
+	private static void cypStep3Execute ( Object _context , MemoryBlock _memoryBlock , MessageStack _message  ) throws Exception
 	{
 		Value <Byte[]> wrappedKey = _memoryBlock.load( "SEED_RESULT" ) ;
 
@@ -68,12 +69,16 @@ public class SomeSchemeRepository
 			i++ ;
 		}
 		
-		byte[] result = CryptographyCoreAPI.testDummyXor( ((Message)_message).getData() , key ) ;
+		byte[] result = CryptographyCoreAPI.testDummyXor( _message.readMessage().getData() , key ) ;
+		
+		Message msg = new Message ( result , true , "encrypted") ;
+		
+		_message.addMessage( msg ) ;
 		
 		System.out.println( "Cypher's scheme has just process one message.");
 	}
 	
-	private static void cypTeardown ( Object _context , MemoryBlock _memoryBlock , Message _message  ) throws Exception
+	private static void cypTeardown ( Object _context , MemoryBlock _memoryBlock , MessageStack _message  ) throws Exception
 	{
 		System.out.println( "Cypher's scheme is about to be shutted down.");
 	}

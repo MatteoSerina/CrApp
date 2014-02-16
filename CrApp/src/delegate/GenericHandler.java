@@ -5,6 +5,7 @@ import identity.MethodIdentity;
 import identity.SchemeIdentity;
 
 import message.Message;
+import message.MessageStack;
 import utility.MemoryBlock;
 import utility.Utils;
 
@@ -23,7 +24,7 @@ public class GenericHandler implements IDelegate
 		String methodName = _call.substring(  ++lastDot , _call.length()  ) ;
 		
 		classIdentity = new ClassIdentity(  Utils.getClassName ( fullName ) , Utils.getClassNameSpace( fullName )   ) ;
-		methodIdentity = new MethodIdentity ( methodName , classIdentity ) ;
+		methodIdentity = new MethodIdentity ( methodName , classIdentity , true ) ;
 		
 		innerDelegate = new Delegate ( _call ) ;
 	}
@@ -38,8 +39,7 @@ public class GenericHandler implements IDelegate
 	}
 	
 
-
-	public void invoke ( Object _context , MemoryBlock _memoryBlock , Message _message  ) throws Exception
+	public void invoke ( Object _context , MemoryBlock _memoryBlock , MessageStack _messages  ) throws Exception
 	{
 		if ( _context == null )
 			throw new Exception ( "Context can not be null") ;
@@ -47,7 +47,7 @@ public class GenericHandler implements IDelegate
 		if ( _memoryBlock == null )
 			throw new Exception( "Memory block can not be null") ;
 	
-		Object [] arguments =  (_message == null ) ? new Object [] { _context , _memoryBlock , new Message () } : new Object [] { _context , _memoryBlock , _message } ;
+		Object [] arguments =  (_messages == null ) ? new Object [] { _context , _memoryBlock , new MessageStack () } : new Object [] { _context , _memoryBlock , _messages } ;
 		innerDelegate.untypedInvoke( arguments ) ;
 	}
 	
