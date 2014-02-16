@@ -42,25 +42,27 @@ public class CryptographyCoreAPI
 	
 	public static Byte[] aesAlgorithm (Byte[] _inMessage, Byte[] _keyBytes, Boolean _encrypt) throws Exception{
 		//Setup of the cipher
+		if(!(_keyBytes.length==16 || _keyBytes.length==24 || _keyBytes.length==32))
+			throw new Exception("Key must be 128 or 192 or 256 bit long.");
 		Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
 		Cipher cipher = Cipher.getInstance("AES", "BC");
-		SecretKeySpec key = new SecretKeySpec(Utils.castObjectByte(_keyBytes), "AES");
+		SecretKeySpec key = new SecretKeySpec(Utils.castToPrimitiveByte(_keyBytes), "AES");
 
 		if(_encrypt){
 			cipher.init(Cipher.ENCRYPT_MODE, key);
 			byte[] ciphertext = new byte[cipher.getOutputSize(_inMessage.length)];
-			int ctLength = cipher.update(Utils.castObjectByte(_keyBytes), 0, _keyBytes.length, ciphertext, 0);
+			int ctLength = cipher.update(Utils.castToPrimitiveByte(_inMessage), 0, _inMessage.length, ciphertext, 0);
 			ctLength += cipher.doFinal(ciphertext, ctLength);
-
-			return Utils.castPrimitiveByte(ciphertext);
+			
+			return Utils.castToObjectByte(ciphertext);
 		}
 		else{
 			cipher.init(Cipher.DECRYPT_MODE, key);
 			byte[] plaintext = new byte[cipher.getOutputSize(_inMessage.length)];
-			int ptLength = cipher.update(Utils.castObjectByte(_keyBytes), 0, _keyBytes.length, plaintext, 0);
+			int ptLength = cipher.update(Utils.castToPrimitiveByte(_inMessage), 0, _inMessage.length, plaintext, 0);
 			ptLength += cipher.doFinal(plaintext, ptLength);
 			
-			return Utils.castPrimitiveByte(plaintext);
+			return Utils.castToObjectByte(plaintext);
 		}
 	}
 

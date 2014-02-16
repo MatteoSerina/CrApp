@@ -49,7 +49,7 @@ public class Utils
 		return fullName.substring( 0 , lastDot ) ;	
 	}
 	
-	public static byte[] castObjectByte(Byte[] _objByte){
+	public static byte[] castToPrimitiveByte(Byte[] _objByte){
 		byte[] result = new byte[_objByte.length];
 		for(int i=0; i<_objByte.length; i++){
 			result[i]=_objByte[i].byteValue();
@@ -57,7 +57,7 @@ public class Utils
 		return result;
 	}
 	
-	public static Byte[] castPrimitiveByte(byte[] _primByte){
+	public static Byte[] castToObjectByte(byte[] _primByte){
 		Byte[] result = new Byte[_primByte.length];
 		for(int i=0; i<_primByte.length; i++){
 			result[i] = new Byte(_primByte[i]);
