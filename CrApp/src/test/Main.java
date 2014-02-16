@@ -1,6 +1,7 @@
 package test;
 
 import message.Message;
+import message.MessageStack;
 import schemes.BaseScheme;
 import utility.MemoryBlock;
 
@@ -37,17 +38,22 @@ public class Main
 	private static void test ( ) throws Exception
 	{
 		byte[] data = new byte [] { 65 , 66 , 67 , 68 } ;
+		
+		MessageStack stack = new MessageStack () ;
 		Message msg = new Message ( data , false , "dummyMsg" ) ;
+		
+		stack.addMessage( msg ) ;
+		
 		SomeSchemeRepository repo = new SomeSchemeRepository () ;
 		BaseScheme scheme = repo.getAlgorithmScheme() ;
 		
 		scheme.load( new Object() ,  new MemoryBlock() ) ;
 		
-		System.out.println( "\n\tSrc Msg Name : " + msg.getName()  + "   Src Msg Val : " +  new String ( msg.getData() ) + "\n" );
+		System.out.println( "\n\tSrc Msg Name : " + stack.readMessage().getName()  + "   Src Msg Val : " +  new String ( stack.readMessage().getData() ) + "\n" );
 		
-		scheme.processMessage( msg ) ;
+		scheme.processMessage( stack ) ;
 		
-		System.out.println( "\n\tDst Msg Name : " + msg.getName()  + "   Dst Msg Val : " +  new String ( msg.getData() ) + "\n" );
+		System.out.println( "\n\tDst Msg Name : " + stack.readMessage().getName()  + "   Dst Msg Val : " +  new String ( stack.readMessage().getData() ) + "\n" );
 		
 		scheme.unload() ;
 	}
@@ -55,9 +61,12 @@ public class Main
 	private static void fixedTest ( ) throws Exception
 	{
 		byte[] data = new byte [] { 65 , 66 , 67 , 68 } ;
+		MessageStack stack = new MessageStack () ;
 		Message msg = new Message ( data , false , "dummyMsg" ) ;
 		SomeSchemeRepository repo = new SomeSchemeRepository () ;
 		BaseScheme scheme = repo.getAlgorithmScheme() ;
+		
+		stack.addMessage( msg ) ;
 		
 		Fix.applyFix( scheme ) ;
 		
@@ -65,11 +74,11 @@ public class Main
 		
 		scheme.load( new Object() ,  new MemoryBlock() ) ;
 		
-		System.out.println( "\n\tSrc Msg Name : " + msg.getName()  + "   Src Msg Val : " +  new String ( msg.getData() ) + "\n" );
+		System.out.println( "\n\tSrc Msg Name : " + stack.readMessage().getName()  + "   Src Msg Val : " +  new String ( stack.readMessage().getData() ) + "\n" );
 		
-		scheme.processMessage( msg ) ;
+		scheme.processMessage( stack ) ;
 		
-		System.out.println( "\n\tDst Msg Name : " + msg.getName()  + "   Dst Msg Val : " +  new String ( msg.getData() ) + "\n" );
+		System.out.println( "\n\tDst Msg Name : " + stack.readMessage().getName()  + "   Dst Msg Val : " +  new String ( stack.readMessage().getData() ) + "\n" );
 		
 		scheme.unload() ;
 	}
