@@ -4,6 +4,7 @@ import identity.ClassIdentity;
 import identity.MethodIdentity;
 import identity.SchemeIdentity;
 
+import log.LogService;
 import message.Message;
 import message.MessageStack;
 import utility.MemoryBlock;
@@ -46,9 +47,13 @@ public class GenericHandler implements IDelegate
 		
 		if ( _memoryBlock == null )
 			throw new Exception( "Memory block can not be null") ;
+		
+		LogService.getLogger( this ).finer ( methodIdentity.getShortDescription() + " is going to be invoked." ) ;
 	
 		Object [] arguments =  (_messages == null ) ? new Object [] { _context , _memoryBlock , new MessageStack () } : new Object [] { _context , _memoryBlock , _messages } ;
 		innerDelegate.untypedInvoke( arguments ) ;
+		
+		LogService.getLogger( this ).finer ( methodIdentity.getShortDescription() + " has just been invoked." ) ;
 	}
 	
 	

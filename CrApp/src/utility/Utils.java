@@ -49,19 +49,40 @@ public class Utils
 		return fullName.substring( 0 , lastDot ) ;	
 	}
 	
-	public static byte[] castToPrimitiveByte(Byte[] _objByte){
-		byte[] result = new byte[_objByte.length];
-		for(int i=0; i<_objByte.length; i++){
-			result[i]=_objByte[i].byteValue();
-		}
+	public static byte[] castToPrimitiveByte ( Byte[] _objByte )
+	{
+		byte[] result = new byte[_objByte.length] ;
+		
+		for ( int i=0; i<_objByte.length; i++ )
+			result[i]= _objByte[i].byteValue() ;
+
 		return result;
 	}
 	
-	public static Byte[] castToObjectByte(byte[] _primByte){
-		Byte[] result = new Byte[_primByte.length];
-		for(int i=0; i<_primByte.length; i++){
-			result[i] = new Byte(_primByte[i]);
-		}
+	public static Byte[] castToObjectByte ( byte[] _primByte )
+	{
+		Byte[] result = new Byte[_primByte.length] ;
+		
+		for ( int i=0; i<_primByte.length; i++ )
+			result[i] = new Byte(_primByte[i]) ;
+
 		return result;
+	}
+	
+	public static String parseException ( Throwable exc )
+	{
+		String result = Utils.STR_EMPTY ;
+		
+		if ( exc == null )
+			return result ;
+		
+		result += parseException ( exc.getCause() ) ;
+		
+		result += "\n" + exc.toString() ;
+		
+		for ( StackTraceElement elem : exc.getStackTrace())
+			result += "\n" + elem.toString() ;
+
+		return result ; 
 	}
 }

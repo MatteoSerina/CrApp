@@ -2,6 +2,8 @@ package schemes;
 
 import identity.SchemeIdentity;
 import java.util.ArrayList;
+
+import log.LogService;
 import message.Message;
 import message.MessageStack;
 import delegate.*;
@@ -24,8 +26,7 @@ public class BaseScheme
 	private ArrayList <Object> afterLoadingBehaviours    = new ArrayList <Object> () ;
 	private ArrayList <Object> messageReceivedBehaviours = new ArrayList <Object> () ;
 	private ArrayList <Object> beforeUnloadingBehaviours = new ArrayList <Object> () ;
-	
-	//TODO : implementa anchve versioni di delegate specifici che ereditino da quelli generici e che tipizzino maggiormente i parametri (poi usa quelli)
+
 	
 	public BaseScheme ( String _name ) 
 	{
@@ -41,6 +42,8 @@ public class BaseScheme
 		if ( _context == null || _memory == null )
 			throw new Exception ( "Invalid parameters can not be null." ) ;
 		
+		LogService.getLogger( this ).fine( name + " scheme's is going to start." ) ;
+		
 		memory         = _memory         ;
 		context        = _context        ;
 		isLoaded       = true            ;
@@ -51,15 +54,22 @@ public class BaseScheme
 				
 		for ( Object action : afterLoadingBehaviours )
 			if ( action.getClass() == this.getClass() )
-				(( BaseScheme ) action ).load( this , memory ) ;
+			{
+				if ( ! (( BaseScheme ) action ).isLoaded() ) 
+					(( BaseScheme ) action ).load( this , memory ) ;
+			}
 			else if ( action instanceof GenericHandler )
 				((GenericHandler) action ).invoke ( this , memory , null ) ;
+		
+		LogService.getLogger( this ).fine( name + " scheme's has just completed the setup phase." ) ;
 	}
 	
 	public void unload () throws Exception
 	{
 		if ( ! isLoaded )
 			throw new Exception ( "Can not unlaod an unloaded scheme." ) ;
+		
+		LogService.getLogger( this ).fine(  name + " scheme's is going to be shutted down." ) ;
 		
 		for ( Object action : beforeUnloadingBehaviours )
 			if ( action.getClass() == this.getClass() )
@@ -81,6 +91,8 @@ public class BaseScheme
 		if (  !( context instanceof BaseScheme )  )
 			memory.clear() ;
 		
+		LogService.getLogger( this ).fine( name + " scheme's has just completed the shut down phase." ) ;
+		
 		context = null  ;
 		isLoaded       = false ;
 	}
@@ -93,9 +105,12 @@ public class BaseScheme
 		MemoryBlock _memory  = memory  ;
 		Object      _context = context ;
 		
-		this.unload() ;
+		LogService.getLogger( this ).fine( name + " scheme's is going to be reloaded." ) ;
 		
+		this.unload() ;
 		this.load ( _context , _memory ) ;
+		
+		LogService.getLogger( this ).fine( name + " scheme's has just completed the reload phase." ) ;
 	}
 	
 	public MessageStack processMessage ( MessageStack _message ) throws Exception
@@ -105,6 +120,8 @@ public class BaseScheme
 		
 		if ( _message == null )
 			throw new Exception ( "Invalid message can not be null." ) ;
+		
+		LogService.getLogger( this ).fine	( name + " scheme's is going to process new message : 	n" + _message.getDescription() ) ;
 		
 		for ( Object action : messageReceivedBehaviours )
 			if ( action.getClass() == this.getClass() )
@@ -122,6 +139,9 @@ public class BaseScheme
 				}	
 			else if ( action instanceof GenericHandler )
 				((GenericHandler) action ).invoke ( context , memory , _message ) ;
+		
+		
+		LogService.getLogger( this ).fine (  "[S] " + name + " scheme's has just processed a message : \n" + _message.getDescription() ) ; 
 		
 		return _message ;
 	}

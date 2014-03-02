@@ -21,17 +21,10 @@ public class MemoryBlock
 	private ArrayList <SchemeIdentity> scopes   = new ArrayList <SchemeIdentity> () ;
 	private HashMap   <String,Value>   innerMap = new HashMap   <String,Value> ()   ;
 	
-	public MemoryBlock ()
-	{}
+	public MemoryBlock () {}
 	
-	public MemoryBlock ( ClassIdentity _fatherIdentity )
+	public MemoryBlock ( int _maxElements ) 
 	{
-		fatherIdentity = _fatherIdentity ;
-	}
-	
-	public MemoryBlock ( ClassIdentity _fatherIdentity , int _maxElements )
-	{
-		fatherIdentity = _fatherIdentity ;
 		maxElements    = _maxElements    ;
 	}
 

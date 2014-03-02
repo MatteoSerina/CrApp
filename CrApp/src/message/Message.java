@@ -49,15 +49,6 @@ public class Message
 		return name ;
 	}
 	
-//	public void setData ( byte[] _data )
-//	{
-//		byte [] clonedData = new byte [ _data.length ] ;
-//		
-//		System.arraycopy ( _data , 0 , clonedData , 0 , _data.length ) ;
-//		
-//		data = clonedData ;
-//	}
-	
 	public byte[] getData ()
 	{
 		byte [] clonedData = new byte [ data.length ] ;		
@@ -71,4 +62,19 @@ public class Message
 		return isEncoded ;
 	}
 	
+	public boolean isBlank ()
+	{
+		return isBlank ;
+	}
+	
+	public String getDescription ()
+	{
+		String description = Utils.STR_EMPTY ;
+		
+		description = "the message name is " + name                                                         + 
+					  ( ( isEncoded ) ? " this message is encoded" : " this message is plain"             ) +
+					  ( ( isBlank   ) ? ", is blank" : ", contains n° " + data.length + " bytes of data"  ) ;
+				      
+		return description ;
+	}
 }
